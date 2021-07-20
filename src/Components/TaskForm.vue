@@ -7,19 +7,21 @@
            placeholder="Название задачи">
     <input v-model="task.description"
            class="input"
-           type="input"
-           placeholder="Описание задачи">
-    <button
-        class="btn"
-        @click="addTask">
+           placeholder="Описание задачи"
+           >
+    <greenButton v-on:click.native="addTask">
       Добавить
-    </button>
+    </greenButton>
   </form>
 </template>
 
 <script>
+import greenButton from "@/UI/greenButton";
 export default {
-  name: "TaskForm",
+  components: {
+    greenButton
+  },
+  name: "task-form",
   data() {
     return{
       task: {
@@ -30,7 +32,7 @@ export default {
   },
   methods: {
     addTask() {
-      if ((this.task.title == ``) || (this.task.title == ``)) {
+      if ((this.task.title === ``) || (this.task.title === ``)) {
         return
       }
       this.task.id = Date.now();
@@ -61,12 +63,4 @@ export default {
   padding: 18px 15px;
   margin-top: 15px;
 }
-.btn{
-  align-self: flex-end;
-  margin-top: 15px;
-  padding: 5px;
-  background: none;
-  border: 2px solid #3bffca;
-}
-
 </style>

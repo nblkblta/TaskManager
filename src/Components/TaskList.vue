@@ -1,0 +1,44 @@
+<template>
+  <div class="TaskList">
+    <div>{{name}}</div>
+  <Task v-bind:key="task.id"
+        v-for="task in tasks"
+        :task="task"
+        @deleteTask="deleteTask">
+  </Task>
+  </div>
+</template>
+
+<script>
+import Task from "@/Components/Task";
+export default {
+  components: {Task},
+  props: {
+    tasks: {
+      type: Array,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    }
+  },
+  methods: {
+    deleteTask(task) {
+      this.$emit(`deleteTask`, task)
+    }
+  },
+  name: "TaskList"
+}
+</script>
+
+<style scoped>
+.TaskList{
+  display: table-cell;
+  padding: 5px;
+  margin: 15px 15px 0 0;
+  border: 2px solid #3bffca;
+  height: 100%;
+  width: 33%;
+}
+</style>
