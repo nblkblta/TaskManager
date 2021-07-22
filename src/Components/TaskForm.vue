@@ -3,12 +3,13 @@
     <div>Добавление задачи</div>
     <input v-model="task.title"
            class="input"
-           type="text"
            placeholder="Название задачи">
     <input v-model="task.description"
            class="input"
-           placeholder="Описание задачи"
-           >
+           placeholder="Описание задачи">
+    <input v-model="task.beginDate"
+           class="input"
+           placeholder="Дата начала работы">
     <greenButton v-on:click.native="addTask">
       Добавить
     </greenButton>
@@ -27,14 +28,25 @@ export default {
       task: {
         title: ``,
         description: ``,
+        beginDate: ``
       }
     }
   },
   methods: {
     addTask() {
-      if ((this.task.title === ``) || (this.task.title === ``)) {
+      if ((this.task.title === ``) || (this.task.title === ``) || (this.task.beginDate === ``) ) {
         return
       }
+      if ((this.task.beginDate.match(/(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/))==null){
+        alert(`Неправильный формат даты`);
+        return
+      }
+      this.task.title = this.task.title.trim();
+      this.task.description = this.task.description.trim();
+      let year = this.task.beginDate.toString().slice(6,10);
+      let month = this.task.beginDate.toString().slice(3,5);
+      let day= this.task.beginDate.toString().slice(0,2);
+      this.task.beginDate = new Date(year, month, day);
       this.task.id = Date.now();
       this.task.date = new Date;
       this.task.state = `Created`;
@@ -42,6 +54,7 @@ export default {
       this.task = {
         title : ``,
         description : ``,
+        beginDate: ``
       }
     }
   }
