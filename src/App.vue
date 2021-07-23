@@ -1,8 +1,9 @@
 <template>
   <div class="app" >
    <TaskForm
-       @add = "addTask"
+       @add = "addNewTask"
    ></TaskForm>
+    <div style="margin-top: 15px" v-if="(tasks.InWork.length===0)&&(tasks.Created.length===0)&&(tasks.Completed.length===0)">Пока нет задач</div>
     <TasksBody
         @deleteTask = "deleteTask"
         :tasks="tasks"
@@ -13,6 +14,7 @@
 <script>
 import TaskForm from "@/Components/TaskForm";
 import TasksBody from "@/Components/TasksBody";
+import * as idbAPI from "./idbAPI.js";
 export default {
   components: {
     TaskForm, TasksBody
@@ -21,28 +23,27 @@ export default {
   data() {
     return{
       tasks: {
-        Created:[
-          {id: 1, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `Created`},
-          {id: 2, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `Created`}
-        ],
-        InWork:[
-          {id: 3, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `InWork`},
-          {id: 4, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `InWork`},
-          {id: 5, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `InWork`}
-        ],
-        Completed:[
-          {id: 6, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `Completed`},
-          {id: 7, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `Completed`},
-          {id: 8, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `Completed`},
-          {id: 9, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `Completed`},
-          {id: 10, title: `title`, description: `description`, date: new Date(Date.now()), beginDate: new Date(Date.now()), state: `Completed`}
-        ]
-      }
+        Created:[],
+        InWork:[],
+        Completed:[]
+      },
     }
   },
   methods: {
+    addNewTask(task) {
+      this.addTask(task);
+      idbAPI.putTask(task);
+    },
     addTask(task) {
-      this.tasks.Created.push(task);
+      if (task.state === `Created`){
+        this.tasks.Created.push(task);
+      }
+      if (task.state === `InWork`){
+        this.tasks.InWork.push(task);
+      }
+      if (task.state === `Doned`){
+        this.tasks.Completed.push(task);
+      }
     },
     deleteTask(task){
       if (task.state === `Created`){
@@ -54,11 +55,12 @@ export default {
       if (task.state === `Completed`){
         this.tasks.Completed = this.tasks.Completed.filter(p=>p.id!==task.id)
       }
-
-
-    }
+      idbAPI.deleteTask(task);
+    },
+  },
+  mounted() {
+      idbAPI.getTasks(this);
   }
-
 }
 </script>
 

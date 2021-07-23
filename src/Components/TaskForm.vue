@@ -44,9 +44,14 @@ export default {
       this.task.title = this.task.title.trim();
       this.task.description = this.task.description.trim();
       let year = this.task.beginDate.toString().slice(6,10);
-      let month = this.task.beginDate.toString().slice(3,5);
+      let month = this.task.beginDate.toString().slice(3,5)-1;
       let day= this.task.beginDate.toString().slice(0,2);
       this.task.beginDate = new Date(year, month, day);
+      if (this.task.beginDate < new Date()){
+        alert(`Дата начала не может быть раньше текущей`);
+        this.task.beginDate = ``;
+        return
+      }
       this.task.id = Date.now();
       this.task.date = new Date;
       this.task.state = `Created`;

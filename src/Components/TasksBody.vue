@@ -1,6 +1,7 @@
 <template>
   <div class="TasksBody">
-    <TaskList v-bind:key="value.id"
+
+    <TaskList  v-bind:key="value.id"
               v-for="(value, name) in tasks"
               :name="name"
               :tasks="value"

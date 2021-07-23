@@ -4,7 +4,8 @@
     <div><strong>Описание: </strong>{{task.description}}</div>
     <div><strong>Дата создания: </strong>{{(task.date.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))}}</div>
     <div><strong>Дата начала работы: </strong>{{(task.beginDate.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))}}</div>
-    <div><strong>Времени прошло с начала: </strong>{{ new Date((Date.now() - task.beginDate + task.beginDate.getTimezoneOffset()*60*1000) ).toLocaleString("ru", {hour: `numeric`, minute: 'numeric', second: 'numeric'})}}</div>
+    <div v-if="(Date.now() - task.beginDate + task.beginDate.getTimezoneOffset()*60*1000)>=0"><strong>Времени прошло с начала: </strong>{{ new Date((Date.now() - task.beginDate + task.beginDate.getTimezoneOffset()*60*1000) ).toLocaleString("ru", {hour: `numeric`, minute: 'numeric', second: 'numeric'})}}</div>
+    <div v-else><strong>Времени прошло с начала: </strong>00:00:00</div>
     <greenButton v-on:click.native="deleteTask">
       Удалить
     </greenButton>
