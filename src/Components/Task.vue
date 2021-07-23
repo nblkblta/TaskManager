@@ -9,6 +9,12 @@
     <greenButton v-on:click.native="deleteTask">
       Удалить
     </greenButton>
+    <greenButton v-on:click.native="editTask">
+      Редактировать
+    </greenButton>
+    <greenButton v-on:click.native="completeTask">
+      Завершить
+    </greenButton>
   </div>
 </template>
 
@@ -26,6 +32,12 @@ export default {
   methods: {
     deleteTask() {
       this.$emit(`deleteTask`, this.task)
+    },
+    editTask() {
+      return
+    },
+    completeTask() {
+      this.$emit(`completeTask`, this.task)
     }
   },
   name: "Task"

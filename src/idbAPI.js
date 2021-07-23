@@ -1,42 +1,35 @@
-export function putTask(task){
-    let openRequest = new Promise(function (resolve){
+function openConnection(){
+    return  new Promise(function (resolve){
         let db = indexedDB.open(`TaskManager`, 1);
+        db.onupgradeneeded = function (){
+            if (!db.objectStoreNames.contains('Tasks')) {
+                db.createObjectStore('Tasks', {keyPath: 'id'});
+            }
+        }
         db.onsuccess = function (){
             resolve(db.result);
         };
     });
-    openRequest.then(db => {
+}
+
+export function putTask(task) {
+    openConnection().then(db => {
         let get_tasks_transaction = db.transaction("Tasks", "readwrite");
         let tasks = get_tasks_transaction.objectStore("Tasks");
-        let request = tasks.put(task);
-        request.onsuccess = event => {
-            console.log(event);
-        }
-        });
+        tasks.put(task);
+    })
 }
 
 export function deleteTask(task){
-    let openRequest = new Promise(function (resolve){
-        let db = indexedDB.open(`TaskManager`, 1);
-        db.onsuccess = function (){
-            resolve(db.result);
-        };
-    });
-    openRequest.then(db => {
+    openConnection().then(db => {
         let get_tasks_transaction = db.transaction("Tasks", "readwrite");
         let tasks = get_tasks_transaction.objectStore("Tasks");
         tasks.delete(task.id);
     });
 }
 
-export async function getTasks(component){
-    let openRequest = new Promise(function (resolve){
-        let db = indexedDB.open(`TaskManager`, 1);
-        db.onsuccess = function (){
-            resolve(db.result);
-        };
-    });
-    openRequest.then(db => {
+export function getTasks(){
+     return openConnection().then(db => {
         let get_tasks_transaction = db.transaction("Tasks", "readonly");
         let tasks = get_tasks_transaction.objectStore("Tasks");
         return  new Promise(resolve => {
@@ -45,8 +38,6 @@ export async function getTasks(component){
                 resolve(request.result);
             }
         });
-    }).then(result=>{
-        result.forEach(task =>component.addTask(task));
-    });
+    })
 }
 

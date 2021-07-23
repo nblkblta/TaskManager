@@ -2,10 +2,11 @@
   <div class="TasksBody">
 
     <TaskList  v-bind:key="value.id"
-              v-for="(value, name) in tasks"
-              :name="name"
-              :tasks="value"
-              @deleteTask= "deleteTask">
+               v-for="(value, name) in tasks"
+               :name="name"
+               :tasks="value"
+               @deleteTask= "deleteTask"
+               @completeTask="completeTask">
     </TaskList>
   </div>
 </template>
@@ -25,6 +26,9 @@ export default {
   methods: {
     deleteTask(task) {
       this.$emit(`deleteTask`, task)
+    },
+    completeTask(task) {
+      this.$emit(`completeTask`, task)
     }
   },
   name: "TasksBody"
