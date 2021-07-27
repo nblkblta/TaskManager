@@ -4,7 +4,7 @@
     <div><strong>Описание: </strong>{{task.description}}</div>
     <div><strong>Дата создания: </strong>{{(task.date.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))}}</div>
     <div><strong>Дата начала работы: </strong>{{(task.beginDate.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))}}</div>
-    <div v-if="(Date.now() - task.beginDate + task.beginDate.getTimezoneOffset()*60*1000)>=0"><strong>Времени прошло с начала: </strong>{{ new Date((Date.now() - task.beginDate + task.beginDate.getTimezoneOffset()*60*1000) ).toLocaleString("ru", {hour: `numeric`, minute: 'numeric', second: 'numeric'})}}</div>
+    <div v-if="(Date.now() - task.beginDate + task.beginDate.getTimezoneOffset()*60*1000)>=0"><strong>Времени прошло с начала: </strong>{{beginDate()}}</div>
     <div v-else><strong>Времени прошло с начала: </strong>00:00:00</div>
     <greenButton v-on:click.native="deleteTask">
       Удалить
@@ -12,7 +12,7 @@
     <greenButton v-on:click.native="showDialog">
       Редактировать
     </greenButton>
-    <greenButton v-if="task.state!=`Completed`" v-on:click.native="completeTask">
+    <greenButton v-if="task.state!==`Completed`" v-on:click.native="completeTask">
       Завершить
     </greenButton>
     <MyDialog
@@ -63,6 +63,21 @@ export default {
     hideDialog(){
       this.dialogVisible = false
     },
+    beginDate(){
+      let now = new Date(Date.now());
+      let beginDay = this.task.beginDate;
+      let day = Math.ceil((now - beginDay)/(1000*3600*24))-1;
+      let pref = ` `;
+      if (day%10 === 1){
+        pref = ` день `;
+      }else if ((day%10 < 5)) {
+        pref = ` дня `;
+      }else{
+        pref = ` дней `;
+      }
+      return day + pref + new Date((now - this.task.beginDate + this.task.beginDate.getTimezoneOffset()*60*1000) ).toLocaleString("ru", {hour: `numeric`, minute: 'numeric', second: 'numeric'})
+    },
+
   },
   name: "Task"
 }
