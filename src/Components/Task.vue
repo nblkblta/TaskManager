@@ -3,8 +3,8 @@
     <div><strong>Название: </strong>{{task.title}}</div>
     <div><strong>Описание: </strong>{{task.description}}</div>
     <div><strong>Дата создания: </strong>{{(task.date.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))}}</div>
-    <div><strong>Дата начала работы: </strong>{{(task.beginDate.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))}}</div>
-    <div v-if="(Date.now() - task.beginDate + task.beginDate.getTimezoneOffset()*60*1000)>=0"><strong>Времени прошло с начала: </strong>{{beginDate()}}</div>
+    <div><strong>Дата начала работы: </strong>{{getBeginDate()}}</div>
+    <div v-if="(Date.now() - task.beginDate + task.beginDate.getTimezoneOffset()*60*1000)>=0"><strong>Времени прошло с начала: </strong>{{fromBeginDate()}}</div>
     <div v-else><strong>Времени прошло с начала: </strong>00:00:00</div>
     <greenButton v-on:click.native="deleteTask">
       Удалить
@@ -47,7 +47,6 @@ export default {
       this.task.title = task.title;
       this.task.description = task.description;
       this.task.beginDate = task.beginDate;
-      console.log(this.task);
       this.$emit("editTask", this.task);
       this.hideDialog();
     },
@@ -63,10 +62,8 @@ export default {
     hideDialog(){
       this.dialogVisible = false
     },
-    beginDate(){
-      let now = new Date(Date.now());
-      let beginDay = this.task.beginDate;
-      let day = Math.ceil((now - beginDay)/(1000*3600*24))-1;
+    fromBeginDate(){
+      let day = Math.ceil((new Date(Date.now()) - this.task.beginDate)/(1000*3600*24))-1;
       let pref = ` `;
       if (day%10 === 1){
         pref = ` день `;
@@ -75,9 +72,11 @@ export default {
       }else{
         pref = ` дней `;
       }
-      return day + pref + new Date((now - this.task.beginDate + this.task.beginDate.getTimezoneOffset()*60*1000) ).toLocaleString("ru", {hour: `numeric`, minute: 'numeric', second: 'numeric'})
+      return day + pref + new Date((Date.now() - this.task.beginDate + this.task.beginDate.getTimezoneOffset()*60*1000) ).toLocaleString("ru", {hour: `numeric`, minute: 'numeric', second: 'numeric'})
     },
-
+    getBeginDate(){
+      return (this.task.beginDate.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))
+    },
   },
   name: "Task"
 }
@@ -90,5 +89,6 @@ export default {
   margin-top: 15px;
   padding: 5px;
   word-break: break-word;
+  border-radius: 10px;
 }
 </style>

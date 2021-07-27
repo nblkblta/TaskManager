@@ -30,7 +30,6 @@ export default {
     },
     editTask(task) {
       this.$emit(`editTask`, task);
-      console.log(task);
     },
     completeTask(task) {
       this.$emit(`completeTask`, task)
@@ -46,5 +45,6 @@ export default {
   display: table;
   flex-direction: row;
   width: 100%;
+
 }
 </style>

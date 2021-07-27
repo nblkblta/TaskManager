@@ -39,9 +39,9 @@ export default {
       }
       this.task.title = this.task.title.trim();
       this.task.description = this.task.description.trim();
-      let year = this.task.beginDate.toString().slice(6,10);
+      let year = this.task.beginDate.toString().slice(6,10)-0;
       let month = this.task.beginDate.toString().slice(3,5)-1;
-      let day= this.task.beginDate.toString().slice(0,2);
+      let day= this.task.beginDate.toString().slice(0,2)-0;
       this.task.beginDate = new Date(year, month, day);
       if (this.task.beginDate < new Date()){
         alert(`Дата начала не может быть раньше текущей`);

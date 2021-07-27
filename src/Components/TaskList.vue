@@ -31,7 +31,6 @@ export default {
     },
     editTask(task) {
       this.$emit(`editTask`, task);
-      console.log(task);
     },
     completeTask(task) {
       this.$emit(`completeTask`, task)
@@ -45,9 +44,10 @@ export default {
 .TaskList{
   display: table-cell;
   padding: 5px;
-  margin: 15px 15px 0 0;
+  margin: 15px 15px 0 10px;
   border: 2px solid #3bffca;
   height: 100%;
   width: 33%;
+  border-radius: 10px;
 }
 </style>
