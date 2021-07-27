@@ -1,5 +1,5 @@
 <template>
-  <div class = "Task" draggable="true">
+  <div class = "Task" draggable="true" >
     <div><strong>Название: </strong>{{task.title}}</div>
     <div><strong>Описание: </strong>{{task.description}}</div>
     <div><strong>Дата создания: </strong>{{(task.date.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))}}</div>
@@ -9,36 +9,60 @@
     <greenButton v-on:click.native="deleteTask">
       Удалить
     </greenButton>
-    <greenButton v-on:click.native="editTask">
+    <greenButton v-on:click.native="showDialog">
       Редактировать
     </greenButton>
-    <greenButton v-on:click.native="completeTask">
+    <greenButton v-if="task.state!=`Completed`" v-on:click.native="completeTask">
       Завершить
     </greenButton>
+    <MyDialog
+        :show="dialogVisible"
+        @hideDialog = "hideDialog">
+      <TaskForm
+          @add = "editTask"
+      ></TaskForm>
+    </MyDialog>
   </div>
 </template>
 
 <script>
 import GreenButton from "@/UI/greenButton";
-
+import MyDialog from "@/Components/MyDialog";
+import TaskForm from "@/Components/TaskForm";
 export default {
-  components: {GreenButton},
+  components: {TaskForm, MyDialog, GreenButton},
   props: {
     task: {
       type: Object,
       required: true
+    },
+  },
+  data(){
+    return {
+      dialogVisible: false
     }
   },
   methods: {
+    editTask(task) {
+      this.task.title = task.title;
+      this.task.description = task.description;
+      this.task.beginDate = task.beginDate;
+      console.log(this.task);
+      this.$emit("editTask", this.task);
+      this.hideDialog();
+    },
     deleteTask() {
       this.$emit(`deleteTask`, this.task)
     },
-    editTask() {
-      return
-    },
     completeTask() {
       this.$emit(`completeTask`, this.task)
-    }
+    },
+    showDialog(){
+      this.dialogVisible = true
+    },
+    hideDialog(){
+      this.dialogVisible = false
+    },
   },
   name: "Task"
 }

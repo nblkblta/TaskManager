@@ -1,5 +1,5 @@
 function openConnection(){
-    return  new Promise(function (resolve){
+    return new Promise(function (resolve){
         let db = indexedDB.open(`TaskManager`, 1);
         db.onupgradeneeded = function (){
             if (!db.objectStoreNames.contains('Tasks')) {

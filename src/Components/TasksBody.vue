@@ -5,6 +5,7 @@
                v-for="(value, name) in tasks"
                :name="name"
                :tasks="value"
+               @editTask= "editTask"
                @deleteTask= "deleteTask"
                @completeTask="completeTask">
     </TaskList>
@@ -26,6 +27,10 @@ export default {
   methods: {
     deleteTask(task) {
       this.$emit(`deleteTask`, task)
+    },
+    editTask(task) {
+      this.$emit(`editTask`, task);
+      console.log(task);
     },
     completeTask(task) {
       this.$emit(`completeTask`, task)

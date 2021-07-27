@@ -34,12 +34,8 @@ export default {
   },
   methods: {
     addTask() {
-      if ((this.task.title === ``) || (this.task.title === ``) || (this.task.beginDate === ``) ) {
-        return
-      }
-      if ((this.task.beginDate.match(/(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/))==null){
-        alert(`Неправильный формат даты`);
-        return
+      if (!this.isValid()){
+        alert(`Некорректные данные`)
       }
       this.task.title = this.task.title.trim();
       this.task.description = this.task.description.trim();
@@ -47,11 +43,11 @@ export default {
       let month = this.task.beginDate.toString().slice(3,5)-1;
       let day= this.task.beginDate.toString().slice(0,2);
       this.task.beginDate = new Date(year, month, day);
-      /*if (this.task.beginDate < new Date()){
+      if (this.task.beginDate < new Date()){
         alert(`Дата начала не может быть раньше текущей`);
         this.task.beginDate = ``;
         return
-      }*/
+      }
       this.task.id = Date.now();
       this.task.date = new Date;
       this.task.state = `Created`;
@@ -61,7 +57,19 @@ export default {
         description : ``,
         beginDate: ``
       }
+    },
+    isValid(){
+      if ((this.task.title === ``) || (this.task.title === ``) || (this.task.beginDate === ``) ) {
+      return false
+      }
+      if ((this.task.beginDate.match(/(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/))==null){
+        alert(`Неправильный формат даты`);
+        return false
+      }
+      return true
     }
+
+
   }
 }
 </script>
