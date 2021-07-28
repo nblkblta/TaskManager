@@ -1,5 +1,7 @@
 <template>
-  <div class = "Task" draggable="true" >
+  <div class = "Task"
+       draggable="true"
+       @dragstart="ondragstart($event, task.id)">
     <div><strong>Название: </strong>{{task.title}}</div>
     <div><strong>Описание: </strong>{{task.description}}</div>
     <div><strong>Дата создания: </strong>{{(task.date.toLocaleString("ru", {year:`numeric`, month:`numeric`, day:`numeric`}))}}</div>
@@ -43,6 +45,11 @@ export default {
     }
   },
   methods: {
+    ondragstart(e, taskId){
+      e.dataTransfer.setData('taskId', taskId.toString());
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.dropEffect = "move";
+    },
     editTask(task) {
       this.task.title = task.title;
       this.task.description = task.description;

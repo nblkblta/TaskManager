@@ -1,13 +1,13 @@
 <template>
   <div class="TasksBody">
-
     <TaskList  v-bind:key="value.id"
                v-for="(value, name) in tasks"
                :name="name"
                :tasks="value"
                @editTask= "editTask"
                @deleteTask= "deleteTask"
-               @completeTask="completeTask">
+               @completeTask="completeTask"
+               @dropTask="dropTask">
     </TaskList>
   </div>
 </template>
@@ -25,14 +25,17 @@ export default {
     }
   },
   methods: {
+    dropTask(taskId, state){
+      this.$emit('dropTask', taskId, state);
+    },
     deleteTask(task) {
-      this.$emit(`deleteTask`, task)
+      this.$emit(`deleteTask`, task);
     },
     editTask(task) {
       this.$emit(`editTask`, task);
     },
     completeTask(task) {
-      this.$emit(`completeTask`, task)
+      this.$emit(`completeTask`, task);
     }
   },
   name: "TasksBody"

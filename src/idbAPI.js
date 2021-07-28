@@ -41,3 +41,16 @@ export function getTasks(){
     })
 }
 
+export function getTask(id){
+    return openConnection().then(db => {
+        let get_tasks_transaction = db.transaction("Tasks", "readonly");
+        let tasks = get_tasks_transaction.objectStore("Tasks");
+        return  new Promise(resolve => {
+            let request = tasks.get(id);
+            request.onsuccess = function () {
+                resolve(request.result);
+            }
+        });
+    })
+}
+

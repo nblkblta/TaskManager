@@ -12,6 +12,7 @@
     </MyDialog>
     <div style="margin-top: 15px" v-if="(tasks.InWork.length===0)&&(tasks.Created.length===0)&&(tasks.Completed.length===0)">Пока нет задач</div>
     <TasksBody
+        @dropTask = "dropTask"
         @editTask = "editTask"
         @deleteTask = "deleteTask"
         @completeTask = "completeTask"
@@ -42,6 +43,15 @@ export default {
     }
   },
   methods: {
+    dropTask(taskId,state){
+      idbAPI.getTask(taskId).then(result=>{
+        this.deleteTask(result);
+        result.state = state;
+        this.addTask(result);
+
+        this.editTask(result);
+      });
+    },
     addNewTask(task) {
       idbAPI.putTask(task);
       this.addTask(task);

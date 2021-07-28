@@ -1,14 +1,17 @@
 <template>
-  <div class="TaskList">
-    <div>{{name}}</div>
-  <Task v-bind:key="task.id"
-        v-for="task in tasks"
-        :task="task"
-        @editTask="editTask"
-        @deleteTask="deleteTask"
-        @completeTask="completeTask">
-  </Task>
-  </div>
+    <div class="TaskList"
+         @drop="ondrop($event, name)"
+         @dragover.prevent
+         @dragenter.prevent>
+      <div>{{name}}</div>
+        <Task v-bind:key="task.id"
+              v-for="task in tasks"
+              :task="task"
+              @editTask="editTask"
+              @deleteTask="deleteTask"
+              @completeTask="completeTask">
+        </Task>
+    </div>
 </template>
 
 <script>
@@ -26,6 +29,11 @@ export default {
     }
   },
   methods: {
+    ondrop(e, state) {
+      let taskId = parseInt(e.dataTransfer.getData('taskId'))
+      this.$emit('dropTask', taskId, state);
+    },
+
     deleteTask(task) {
       this.$emit(`deleteTask`, task)
     },
