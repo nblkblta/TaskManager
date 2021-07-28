@@ -35,7 +35,7 @@ export default {
   methods: {
     addTask() {
       if (!this.isValid()){
-        alert(`Некорректные данные`)
+        return;
       }
       this.task.title = this.task.title.trim();
       this.task.description = this.task.description.trim();
@@ -60,6 +60,7 @@ export default {
     },
     isValid(){
       if ((this.task.title === ``) || (this.task.title === ``) || (this.task.beginDate === ``) ) {
+        alert(`Некорректные данные`)
       return false
       }
       if ((this.task.beginDate.match(/(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/))==null){
@@ -68,7 +69,6 @@ export default {
       }
       return true
     }
-
 
   }
 }
